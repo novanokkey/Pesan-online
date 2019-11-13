@@ -1,3 +1,19 @@
+<?php
+error_reporting(0);
+function __autoload($class)
+{
+    require_once "class/$class.php";
+}
+
+$folder   = "home";
+
+$tabeldb  = "$folder";
+$hal    = "$folder.php";
+$halaman  = "home";
+
+$produk = new Produk();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

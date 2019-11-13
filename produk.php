@@ -1,3 +1,19 @@
+<?php
+error_reporting(0);
+function __autoload($class)
+{
+    require_once "class/$class.php";
+}
+
+$folder   = "home";
+
+$tabeldb  = "$folder";
+$hal    = "$folder.php";
+$halaman  = "home";
+
+$produk = new Produk();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,36 +55,7 @@
 
     <div class="click-closed"></div>
     <!--/ Form Search Star /-->
-
-    <!--/ Form Search End /-->
-
-    <!--/ Nav Star /-->
-    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
-        <div class="container">
-            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
-                aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <a class="navbar-brand text-brand" href="index.html">E<span class="color-b">SHOP</span></a>
-            <button type="button" class="btn btn-link nav-search navbar-toggle-box-collapse d-md-none"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                <span class="fa fa-search" aria-hidden="true"></span>
-            </button>
-            <div class="navbar-collapse collapse justify-content-left" id="navbarDefault">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="produk.php">Produk</a>
-                    </li>
-                </ul>
-            </div>
-            <button type="button" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                Keranjang Ku (0)
-            </button>
-        </div>
-    </nav>
+    <?php include "head.php"; ?>
     <!--/ Nav End /-->
     <section class="intro-single">
         <div class="container">
@@ -109,31 +96,39 @@
                     </div>
                 </div>
 
+
+                <?php
+
+
+                $rows_produk = $produk->selectall();
+                foreach ($rows_produk as $row) {
+                    ?>
+
                 <div class="col-md-4">
                     <div class="card-box-a card-shadow">
                         <div class="img-box-a">
-                            <img src="img/property-6.jpg" alt="" class="img-a img-fluid">
+                            <img src="img/produk/<?php echo $row['gambar1']; ?>" alt="" class="img-a img-fluid">
                         </div>
                         <div class="card-overlay">
                             <div class="card-overlay-a-content">
                                 <div class="card-header-a">
                                     <h2 class="card-title-a">
-                                        <a href="property-single.html">Produk 1
+                                        <a href="property-single.html"><?php echo $row['nama_produk']; ?>
                                         </a>
                                     </h2>
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <span class="price-a">Rp. 120.000</span>
+                                        <span class="price-a">Rp. <?php echo $row['harga']; ?></span>
                                     </div>
-                                    <a href="produkdetail.php" class="link-a">Lihat detail
+                                    <a href="detailproduk-<?php echo $row['idproduk']; ?>" class="link-a">Lihat detail
                                         <span class="ion-ios-arrow-forward"></span>
                                     </a>
                                 </div>
                                 <div class="card-footer-a">
                                     <ul class="card-info d-flex justify-content-around">
                                         <li>
-                                            <a href="keranjang.php" class="link-a">Add to keranjang
+                                            <a href="keranjang" class="link-a">Masukan ke keranjang
                                                 <span class="ion-ios-arrow-forward"></span>
                                             </a>
                                         </li>
@@ -144,181 +139,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="img/property-6.jpg" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a href="property-single.html">Produk 2
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">Rp. 120.000</span>
-                                    </div>
-                                    <a href="produkdetail.php" class="link-a">Lihat detail
-                                        <span class="ion-ios-arrow-forward"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <a href="Keranjang.php" class="link-a">Add to keranjang
-                                                <span class="ion-ios-arrow-forward"></span>
-                                            </a>
-                                        </li>
 
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="img/property-6.jpg" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a href="property-single.html">Produk 3
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">Rp. 120.000</span>
-                                    </div>
-                                    <a href="produkdetail.php" class="link-a">Lihat detail
-                                        <span class="ion-ios-arrow-forward"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <a href="keranjang.php" class="link-a">Add to keranjang
-                                                <span class="ion-ios-arrow-forward"></span>
-                                            </a>
-                                        </li>
+                <?php } ?>
 
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="img/property-6.jpg" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a href="property-single.html">Produk 4
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">Rp. 120.000</span>
-                                    </div>
-                                    <a href="produkdetail.php" class="link-a">Lihat detail
-                                        <span class="ion-ios-arrow-forward"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <a href="keranjang.php" class="link-a">Add to keranjang
-                                                <span class="ion-ios-arrow-forward"></span>
-                                            </a>
-                                        </li>
 
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="img/property-6.jpg" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a href="property-single.html">Produk 5
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">Rp. 120.000</span>
-                                    </div>
-                                    <a href="produkdetail.php" class="link-a">Lihat detail
-                                        <span class="ion-ios-arrow-forward"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <a href="keranjang.php" class="link-a">Add to keranjang
-                                                <span class="ion-ios-arrow-forward"></span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="img/property-6.jpg" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a href="property-single.html">Produk 6
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">Rp. 120.000</span>
-                                    </div>
-                                    <a href="produkdetail.php" class="link-a">Lihat detail
-                                        <span class="ion-ios-arrow-forward"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <a href="keranjang.php" class="link-a">Add to keranjang
-                                                <span class="ion-ios-arrow-forward"></span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
@@ -351,38 +175,8 @@
     </section>
 
 
+    <?php include "foot.php"; ?>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav class="nav-footer">
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <a href="#">Hubungi Kami</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Tentang Kami</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Pusat Bantuan</a>
-                            </li>
-
-                        </ul>
-                    </nav>
-
-                    <div class="copyright-footer">
-                        <p class="copyright color-text-a">
-                            &copy; Copyright
-                            <span class="color-a">ESHOP</span>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!--/ Footer End /-->
 
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
     <div id="preloader"></div>
