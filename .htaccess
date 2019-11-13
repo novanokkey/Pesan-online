@@ -1,0 +1,13 @@
+RewriteEngine on
+
+RewriteRule ^home-(.*)$ index.php [L]
+RewriteRule ^home$ index.php [L]
+
+RewriteRule ^produk$ produk.php [L]
+RewriteRule ^detailproduk-(.*)$ produkdetail.php?id=$1 [L]
+RewriteRule ^keranjang$ keranjang.php [L]
+RewriteRule ^tagihan$ tagihan.php [L]
+RewriteRule ^konfirmasi$ konfirmasi.php [L]
+
+RewriteRule ^logout$ logout.php [L]
+Options All -Indexes
