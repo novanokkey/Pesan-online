@@ -5,72 +5,21 @@ function __autoload($class)
     require_once "class/$class.php";
 }
 
+$pelanggan = new Pelanggan();
+
+$currentUser = $pelanggan->getUser();
+
 $folder   = "home";
 
 $tabeldb  = "$folder";
 $hal    = "$folder.php";
 $halaman  = "home";
 
+ 
+$produk = new Produk();
 
-echo $_POST['idproduk'];
-echo $_POST['harga'];
-echo $_POST['jumlah'];
 
-//action.php
 
-session_start();
-
-if(isset($_POST["add_to_cart"]))
-{
-	if($_POST["action"] == "add")
-	{
-		if(isset($_SESSION["shopping_cart"]))
-		{
-			$is_available = 0;
-			foreach($_SESSION["shopping_cart"] as $keys => $values)
-			{
-				if($_SESSION["shopping_cart"][$keys]['idproduk'] == $_POST["idproduk"])
-				{
-					$is_available++;
-					$_SESSION["shopping_cart"][$keys]['jumlah'] = $_SESSION["shopping_cart"][$keys]['jumlah'] + $_POST["jumlah"];
-				}
-			}
-			if($is_available == 0)
-			{
-				$item_array = array(
-					'idproduk'               =>     $_POST["idproduk"],  
-					'harga'             =>     $_POST["harga"],  
-					'jumlah'            =>     $_POST["jumlah"]
-				);
-				$_SESSION["shopping_cart"][] = $item_array;
-			}
-		}
-		else
-		{
-			$item_array = array(
-				'idproduk'               =>     $_POST["idproduk"],  
-					'harga'             =>     $_POST["harga"],  
-					'jumlah'            =>     $_POST["jumlah"]
-			);
-			$_SESSION["shopping_cart"][] = $item_array;
-		}
-	}
-
-	if($_POST["action"] == 'remove')
-	{
-		foreach($_SESSION["shopping_cart"] as $keys => $values)
-		{
-			if($values["idproduk"] == $_POST["idproduk"])
-			{
-				unset($_SESSION["shopping_cart"][$keys]);
-			}
-		}
-	}
-	if($_POST["action"] == 'empty')
-	{
-		unset($_SESSION["shopping_cart"]);
-	}
-}
 
 ?>
 <!DOCTYPE html>
@@ -135,7 +84,7 @@ if(isset($_POST["add_to_cart"]))
                                             <span class="color-b">E </span> SHOP
                                             <br> Pilihan terbaik</h1>
                                         <p class="intro-subtitle intro-price">
-                                            <a href="keranjang"><span class="price-a">PESAN SEKARANG</span></a>
+                                            <a href="#"><span class="price-a">PESAN SEKARANG</span></a>
                                         </p>
                                     </div>
                                 </div>
@@ -157,7 +106,7 @@ if(isset($_POST["add_to_cart"]))
                                             <span class="color-b">PROMO </span> WEEKEND
                                             <br> All Produk</h1>
                                         <p class="intro-subtitle intro-price">
-                                            <a href="keranjang"><span class="price-a">PESAN SEKARANG</span></a>
+                                            <a href="#"><span class="price-a">PESAN SEKARANG</span></a>
                                         </p>
                                     </div>
                                 </div>
@@ -179,7 +128,7 @@ if(isset($_POST["add_to_cart"]))
                                             <span class="color-b">Banyak </span> Bonus
                                             <br> Semua Produk</h1>
                                         <p class="intro-subtitle intro-price">
-                                            <a href="keranjang"><span class="price-a">Pesan</span></a>
+                                            <a href="#"><span class="price-a">Pesan</span></a>
                                         </p>
                                     </div>
                                 </div>
@@ -191,32 +140,33 @@ if(isset($_POST["add_to_cart"]))
         </div>
     </div>
 
+
     <section class="section-property section-t8">
         <div class="container">
 
             <div id="property-carousel" class="owl-carousel owl-theme">
             <?php
 
-$produk = new Produk();
 $rows_produk = $produk->selectall();
 foreach ($rows_produk as $row) {
     ?>
 <div class="carousel-item-b">
     <div class="card-box-a card-shadow">
         <div class="img-box-a">
-            <img src="img/produk/<?php echo $row['gambar1']; ?>" alt="" class="img-a img-fluid">
+            <img src="img/produk/<?php echo $row['gambar1']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="img-a img-fluid">
         </div>
         <div class="card-overlay">
             <div class="card-overlay-a-content">
                 <div class="card-header-a">
                     <h2 class="card-title-a">
-                        <a href=""><?php echo $row['nama_produk']; ?>
+                        <a href="aksikeranjang-<?php echo $row['idproduk']; ?>"><?php echo $row['nama_produk']; ?>
                         </a>
                     </h2>
                 </div>
+                
                 <div class="card-body-a">
                     <div class="price-box d-flex">
-                        <span class="price-a">Rp. <?php echo $row['harga']; ?></span>
+                        <span class="price-a">Rp. <?php echo number_format($row['harga'],0,',','.'); ?></span>
                     </div>
                     <a href="detailproduk-<?php echo $row['idproduk']; ?>" class="link-a">Lihat detail
                         <span class="ion-ios-arrow-forward"></span>
@@ -225,18 +175,9 @@ foreach ($rows_produk as $row) {
                 <div class="card-footer-a">
                     <ul class="card-info d-flex justify-content-around">
                         <li>
-                        <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
-                            <input type="hidden" name="jumlah" id="jumlah<?php echo $row['idproduk']; ?>"
-                                class="form-control" value="1" />
-
-                            <input type="hidden" name="nama_produk" id="nama_produk<?php echo $row['idproduk']; ?>"
-                                value="<?php echo $row['idproduk']; ?>" />
-                                
-                            <input type="hidden" name="harga" id="harga<?php echo $row['idproduk']; ?>"
-                                value="<?php echo $row['harga']; ?>" />
-                                <input type="submit" name="add_to_cart" id="<?php echo $row['idproduk']; ?>" class="btn btn-primary" value="Masukan ke keranjang" />
-                            
-                           </form>
+                        <a href="aksikeranjang-<?php echo $row['idproduk']; ?>" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block" >Masukan ke keranjang
+                                    <span class="ion-ios-arrow-forward"></span>
+                                </a>
                         </li>
 
                     </ul>
@@ -251,11 +192,10 @@ foreach ($rows_produk as $row) {
             </div>
         </div>
     </section>
-    <hr>
     <!--/ Property End /-->
 
     <!--/ Agents Star /-->
-
+<hr>
 
     <!--/ News Star /-->
 

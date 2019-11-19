@@ -5,6 +5,10 @@ function __autoload($class)
     require_once "class/$class.php";
 }
 
+$pelanggan = new Pelanggan();
+
+$currentUser = $pelanggan->getUser();
+
 $folder   = "home";
 
 $tabeldb  = "$folder";
@@ -70,7 +74,7 @@ $produk = new Produk();
                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#">Produk</a>
+                                <a href="produk">Produk</a>
                             </li>
 
                         </ol>
@@ -83,20 +87,7 @@ $produk = new Produk();
     <section class="property-grid grid">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="grid-option">
-                        <form>
-                            <select class="custom-select">
-                                <option selected>Kategori Produk</option>
-                                <option value="1">New to Old</option>
-                                <option value="2">For Rent</option>
-                                <option value="3">For Sale</option>
-                            </select>
-                        </form>
-                    </div>
-                </div>
-
-
+                
                 <?php
 
 
@@ -119,7 +110,7 @@ $produk = new Produk();
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <span class="price-a">Rp. <?php echo $row['harga']; ?></span>
+                                        <span class="price-a">Rp. <?php echo number_format($row['harga'],0,',','.'); ?></span>
                                     </div>
                                     <a href="detailproduk-<?php echo $row['idproduk']; ?>" class="link-a">Lihat detail
                                         <span class="ion-ios-arrow-forward"></span>
@@ -128,7 +119,7 @@ $produk = new Produk();
                                 <div class="card-footer-a">
                                     <ul class="card-info d-flex justify-content-around">
                                         <li>
-                                            <a href="keranjang" class="link-a">Masukan ke keranjang
+                                            <a href="aksikeranjang-<?php echo $row['idproduk']; ?>" class="link-a">Masukan ke keranjang
                                                 <span class="ion-ios-arrow-forward"></span>
                                             </a>
                                         </li>
@@ -144,37 +135,11 @@ $produk = new Produk();
 
 
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <nav class="pagination-a">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">
-                                    <span class="ion-ios-arrow-back"></span>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item next">
-                                <a class="page-link" href="#">
-                                    <span class="ion-ios-arrow-forward"></span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+            
         </div>
     </section>
 
-
+<hr>
     <?php include "foot.php"; ?>
 
 

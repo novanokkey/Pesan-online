@@ -10,8 +10,8 @@ $folder   = "home";
 $tabeldb  = "$folder";
 $hal    = "$folder.php";
 $halaman  = "home";
-
-$produk = new Produk();
+session_start(); 
+$keranjang = new Keranjang();
 
 ?>
 <!DOCTYPE html>
@@ -58,33 +58,7 @@ $produk = new Produk();
 
     <!--/ Form Search End /-->
 
-    <!--/ Nav Star /-->
-    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
-        <div class="container">
-            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
-                aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <a class="navbar-brand text-brand" href="index.html">E<span class="color-b">SHOP</span></a>
-            <button type="button" class="btn btn-link nav-search navbar-toggle-box-collapse d-md-none"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                <span class="fa fa-search" aria-hidden="true"></span>
-            </button>
-            <div class="navbar-collapse collapse justify-content-left" id="navbarDefault">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="produk.php">Produk</a>
-                    </li>
-                </ul>
-            </div>
-            <a href="keranjang.php" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                Keranjang Ku (0)
-            </a>
-        </div>
-    </nav>
+    <?php include "head.php"; ?>
     <!--/ Nav End /-->
     <section class="intro-single">
         <div class="container">
@@ -119,7 +93,7 @@ $produk = new Produk();
                     <table class="table table-sm table-dark">
                         <thead>
                             <tr>
-                                <th scope="col" width="5%">#</th>
+                                <th scope="col" width="5%">No</th>
                                 <th scope="col" width="25%">Produk</th>
                                 <th scope="col" width="10%">Harga (Rp)</th>
                                 <th scope="col" width="5%">Jumlah</th>
@@ -129,26 +103,48 @@ $produk = new Produk();
                             </tr>
                         </thead>
                         <tbody>
+                        <?php
+                        $i=1;
+                            $rows_keranjang = $keranjang->selectall($idsession);
+                            foreach ($rows_keranjang as $row) {
+
+                                $idproduk = $row['idproduk'];
+                                $hit_produk = $keranjang->selectCountProduk($idproduk);
+                        ?>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Kamar Bintang 7</td>
-                                <td>120.000</td>
-                                <td><input type="text" name="subject" class="form-control" value="1">
+                                <th scope="row"><?php echo $i++ ?></th>
+                                <td><?php echo $row['nama_produk']; ?> </td>
+                                <td><?php echo number_format($row['harga'],0,',','.'); ?></td>
+                                <td><?php echo $hit_produk['idproduk']; ?> 
                                 </td>
                                 <td>
-                                    <center>120.000</center>
+                                    <center>
+                                    <?php 
+                                    
+                                    echo number_format($row['harga']*$hit_produk['idproduk'],0,',','.'); 
+                                    $jumlah = $row['harga']*$hit_produk['idproduk'];
+                                    $total = $total + $jumlah;
+                                    ?>
+                                    </center>
                                 </td>
                             </tr>
-                            <tr>
+                            
+ <?php }?>
+ <tr>
                                 <th colspan="4">
                                     <center>Total Pesanan</center>
                                 </th>
 
                                 <td>
-                                    <center>120.000</center>
+                                    <center>
+                                    <?php 
+                                     
+
+                                    echo number_format($total,0,',','.')
+                                    ?>
+                                    </center>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                     <div class="row">
@@ -171,36 +167,7 @@ $produk = new Produk();
 
 
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav class="nav-footer">
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <a href="#">Hubungi Kami</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Tentang Kami</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Pusat Bantuan</a>
-                            </li>
-
-                        </ul>
-                    </nav>
-
-                    <div class="copyright-footer">
-                        <p class="copyright color-text-a">
-                            &copy; Copyright
-                            <span class="color-a">ESHOP</span>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php include "foot.php"; ?>
     <!--/ Footer End /-->
 
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>

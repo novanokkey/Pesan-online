@@ -5,9 +5,14 @@ RewriteRule ^home$ index.php [L]
 
 RewriteRule ^produk$ produk.php [L]
 RewriteRule ^detailproduk-(.*)$ produkdetail.php?id=$1 [L]
+RewriteRule ^detailkeranjang-(.*)$ keranjang.php?id=$1 [L]
 RewriteRule ^keranjang$ keranjang.php [L]
 RewriteRule ^tagihan$ tagihan.php [L]
 RewriteRule ^konfirmasi$ konfirmasi.php [L]
+RewriteRule ^pelanggan$ pelanggan.php [L]
+
+
+RewriteRule ^aksikeranjang-(.*)$ aksi_keranjang.php?id=$1 [L]
 
 RewriteRule ^logout$ logout.php [L]
 Options All -Indexes

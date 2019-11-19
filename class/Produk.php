@@ -17,7 +17,8 @@ class Produk extends Db
 
     public function selectByid($id)
     {
-        $sql = "SELECT * FROM produk WHERE idproduk = :id";
+        $sql = "SELECT * FROM produk
+        INNER JOIN kategori_produk ON kategori_produk.idkatproduk=produk.idkatproduk WHERE idproduk = :id";
         $stmt = $this->connect()->prepare($sql);
         $stmt->bindValue(":id", $id);
         $stmt->execute();

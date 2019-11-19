@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 13 Nov 2019 pada 09.15
+-- Waktu pembuatan: 19 Nov 2019 pada 05.34
 -- Versi server: 10.4.6-MariaDB
 -- Versi PHP: 7.2.22
 
@@ -43,6 +43,20 @@ INSERT INTO `kategori_produk` (`idkatproduk`, `nama_kategori`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `keranjang`
+--
+
+CREATE TABLE `keranjang` (
+  `idkeranjang` int(4) UNSIGNED NOT NULL,
+  `idproduk` int(4) NOT NULL DEFAULT 0,
+  `harga` varchar(12) NOT NULL,
+  `jumlah` varchar(12) NOT NULL,
+  `idsession` varchar(12) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `konfirmasi_tagihan`
 --
 
@@ -61,24 +75,39 @@ CREATE TABLE `konfirmasi_tagihan` (
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `pelanggan`
+--
+
+CREATE TABLE `pelanggan` (
+  `idpelanggan` int(4) UNSIGNED NOT NULL,
+  `nama_lengkap` varchar(128) NOT NULL,
+  `alamat` text NOT NULL,
+  `kodepos` varchar(8) NOT NULL,
+  `nohp` varchar(16) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `password` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+--
+-- Dumping data untuk tabel `pelanggan`
+--
+
+INSERT INTO `pelanggan` (`idpelanggan`, `nama_lengkap`, `alamat`, `kodepos`, `nohp`, `email`, `password`) VALUES
+(1, '12', '89', '8', '89', '98@gmail.com', '9'),
+(2, 'tt', 'tt', 'tt', 'tt', 'tt@gmail.com', '44');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `pesanan`
 --
 
 CREATE TABLE `pesanan` (
   `idpesanandetail` int(4) UNSIGNED NOT NULL,
   `notagihan` varchar(32) NOT NULL,
-  `idpesanan` int(4) NOT NULL DEFAULT 0,
   `metode_pembayaran` enum('transfer','bayar_ditempat') NOT NULL DEFAULT 'transfer',
+  `status_pembayaran` enum('Y','T') NOT NULL DEFAULT 'T',
   `term` enum('Y','T') NOT NULL DEFAULT 'T',
-  `nama_awal` varchar(128) NOT NULL,
-  `nama_akhir` varchar(128) NOT NULL,
-  `idprovinsi` varchar(128) NOT NULL,
-  `idkabkota` varchar(128) NOT NULL,
-  `idkelurahan` varchar(128) NOT NULL,
-  `alamat` text NOT NULL,
-  `kodepos` varchar(8) NOT NULL,
-  `nohp` varchar(16) NOT NULL,
-  `email` varchar(128) NOT NULL,
   `catatan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
@@ -90,11 +119,24 @@ CREATE TABLE `pesanan` (
 
 CREATE TABLE `pesanan_detail` (
   `idpesanan` int(4) UNSIGNED NOT NULL,
+  `idpelanggan` varchar(32) NOT NULL,
   `idproduk` int(4) NOT NULL DEFAULT 0,
   `notagihan` varchar(32) NOT NULL DEFAULT '0',
-  `harga` varchar(12) NOT NULL,
-  `jumlah` varchar(12) NOT NULL
+  `jumlah` varchar(12) NOT NULL,
+  `idsession` varchar(32) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+--
+-- Dumping data untuk tabel `pesanan_detail`
+--
+
+INSERT INTO `pesanan_detail` (`idpesanan`, `idpelanggan`, `idproduk`, `notagihan`, `jumlah`, `idsession`, `status`) VALUES
+(11, '', 2, '0', '1', 'knkjgmogqptok70nfkmmppp0fo', '0'),
+(12, '', 3, '0', '1', 'knkjgmogqptok70nfkmmppp0fo', '0'),
+(13, '', 2, '0', '1', 'knkjgmogqptok70nfkmmppp0fo', '0'),
+(14, '', 1, '0', '1', 'knkjgmogqptok70nfkmmppp0fo', '0'),
+(15, '', 2, '0', '1', 'knkjgmogqptok70nfkmmppp0fo', '0');
 
 -- --------------------------------------------------------
 
@@ -126,20 +168,14 @@ INSERT INTO `produk` (`idproduk`, `idkatproduk`, `nama_produk`, `deskripsi`, `ha
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tagihan`
+-- Struktur dari tabel `user`
 --
 
-CREATE TABLE `tagihan` (
-  `idtagihan` int(4) UNSIGNED NOT NULL,
-  `notagihan` varchar(32) NOT NULL DEFAULT '0',
-  `namadepan` varchar(32) NOT NULL DEFAULT '0',
-  `namabelakang` varchar(32) NOT NULL DEFAULT '0',
-  `provinsi` varchar(64) NOT NULL DEFAULT '0',
-  `kota` varchar(64) NOT NULL DEFAULT '0',
-  `kelurahan` varchar(64) NOT NULL DEFAULT '0',
-  `alamat` text NOT NULL DEFAULT '0',
-  `email` varchar(12) NOT NULL,
-  `catatan` text NOT NULL DEFAULT ''
+CREATE TABLE `user` (
+  `iduser` int(4) UNSIGNED NOT NULL,
+  `nama_lengkap` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `password` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
@@ -153,10 +189,22 @@ ALTER TABLE `kategori_produk`
   ADD PRIMARY KEY (`idkatproduk`);
 
 --
+-- Indeks untuk tabel `keranjang`
+--
+ALTER TABLE `keranjang`
+  ADD PRIMARY KEY (`idkeranjang`);
+
+--
 -- Indeks untuk tabel `konfirmasi_tagihan`
 --
 ALTER TABLE `konfirmasi_tagihan`
   ADD PRIMARY KEY (`idkonfirmasi`);
+
+--
+-- Indeks untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  ADD PRIMARY KEY (`idpelanggan`);
 
 --
 -- Indeks untuk tabel `pesanan`
@@ -177,10 +225,10 @@ ALTER TABLE `produk`
   ADD PRIMARY KEY (`idproduk`);
 
 --
--- Indeks untuk tabel `tagihan`
+-- Indeks untuk tabel `user`
 --
-ALTER TABLE `tagihan`
-  ADD PRIMARY KEY (`idtagihan`);
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`iduser`);
 
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
@@ -193,10 +241,22 @@ ALTER TABLE `kategori_produk`
   MODIFY `idkatproduk` int(4) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT untuk tabel `keranjang`
+--
+ALTER TABLE `keranjang`
+  MODIFY `idkeranjang` int(4) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT untuk tabel `konfirmasi_tagihan`
 --
 ALTER TABLE `konfirmasi_tagihan`
   MODIFY `idkonfirmasi` int(4) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  MODIFY `idpelanggan` int(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `pesanan`
@@ -208,7 +268,7 @@ ALTER TABLE `pesanan`
 -- AUTO_INCREMENT untuk tabel `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
-  MODIFY `idpesanan` int(4) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `idpesanan` int(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `produk`
@@ -217,10 +277,10 @@ ALTER TABLE `produk`
   MODIFY `idproduk` int(4) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `tagihan`
+-- AUTO_INCREMENT untuk tabel `user`
 --
-ALTER TABLE `tagihan`
-  MODIFY `idtagihan` int(4) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `user`
+  MODIFY `iduser` int(4) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
