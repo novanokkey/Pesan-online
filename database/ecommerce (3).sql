@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 19 Nov 2019 pada 05.34
+-- Waktu pembuatan: 19 Nov 2019 pada 17.11
 -- Versi server: 10.4.6-MariaDB
 -- Versi PHP: 7.2.22
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `kategori_produk` (
   `idkatproduk` int(4) UNSIGNED ZEROFILL NOT NULL,
-  `nama_kategori` varchar(128) NOT NULL
+  `nama_kategori` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
@@ -49,9 +49,9 @@ INSERT INTO `kategori_produk` (`idkatproduk`, `nama_kategori`) VALUES
 CREATE TABLE `keranjang` (
   `idkeranjang` int(4) UNSIGNED NOT NULL,
   `idproduk` int(4) NOT NULL DEFAULT 0,
-  `harga` varchar(12) NOT NULL,
-  `jumlah` varchar(12) NOT NULL,
-  `idsession` varchar(12) NOT NULL
+  `harga` varchar(12) DEFAULT NULL,
+  `jumlah` varchar(12) DEFAULT NULL,
+  `idsession` varchar(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
@@ -62,14 +62,14 @@ CREATE TABLE `keranjang` (
 
 CREATE TABLE `konfirmasi_tagihan` (
   `idkonfirmasi` int(4) UNSIGNED NOT NULL,
-  `notagihan` varchar(32) NOT NULL DEFAULT '0',
-  `namapengirim` varchar(32) NOT NULL DEFAULT '0',
-  `email` varchar(12) NOT NULL,
-  `bankasal` varchar(32) NOT NULL DEFAULT '0',
-  `tgltransfer` varchar(64) NOT NULL DEFAULT '0',
-  `banktujuan` varchar(64) NOT NULL DEFAULT '0',
-  `jumlahtransfer` varchar(64) NOT NULL DEFAULT '0',
-  `pesan` text NOT NULL DEFAULT '0'
+  `notagihan` varchar(32) DEFAULT NULL,
+  `namapengirim` varchar(32) DEFAULT NULL,
+  `email` varchar(12) DEFAULT NULL,
+  `bankasal` varchar(32) DEFAULT NULL,
+  `tgltransfer` varchar(64) DEFAULT NULL,
+  `banktujuan` varchar(64) DEFAULT NULL,
+  `jumlahtransfer` varchar(64) DEFAULT NULL,
+  `pesan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
@@ -80,12 +80,12 @@ CREATE TABLE `konfirmasi_tagihan` (
 
 CREATE TABLE `pelanggan` (
   `idpelanggan` int(4) UNSIGNED NOT NULL,
-  `nama_lengkap` varchar(128) NOT NULL,
-  `alamat` text NOT NULL,
-  `kodepos` varchar(8) NOT NULL,
-  `nohp` varchar(16) NOT NULL,
-  `email` varchar(128) NOT NULL,
-  `password` varchar(128) NOT NULL
+  `nama_lengkap` varchar(128) DEFAULT NULL,
+  `alamat` text DEFAULT NULL,
+  `kodepos` varchar(8) DEFAULT NULL,
+  `nohp` varchar(16) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  `password` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
@@ -104,11 +104,11 @@ INSERT INTO `pelanggan` (`idpelanggan`, `nama_lengkap`, `alamat`, `kodepos`, `no
 
 CREATE TABLE `pesanan` (
   `idpesanandetail` int(4) UNSIGNED NOT NULL,
-  `notagihan` varchar(32) NOT NULL,
+  `notagihan` varchar(32) DEFAULT NULL,
   `metode_pembayaran` enum('transfer','bayar_ditempat') NOT NULL DEFAULT 'transfer',
   `status_pembayaran` enum('Y','T') NOT NULL DEFAULT 'T',
   `term` enum('Y','T') NOT NULL DEFAULT 'T',
-  `catatan` text NOT NULL
+  `catatan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
@@ -119,12 +119,12 @@ CREATE TABLE `pesanan` (
 
 CREATE TABLE `pesanan_detail` (
   `idpesanan` int(4) UNSIGNED NOT NULL,
-  `idpelanggan` varchar(32) NOT NULL,
-  `idproduk` int(4) NOT NULL DEFAULT 0,
-  `notagihan` varchar(32) NOT NULL DEFAULT '0',
-  `jumlah` varchar(12) NOT NULL,
-  `idsession` varchar(32) NOT NULL,
-  `status` enum('0','1') NOT NULL DEFAULT '0'
+  `idpelanggan` varchar(32) DEFAULT NULL,
+  `idproduk` int(4) DEFAULT 0,
+  `notagihan` varchar(32) DEFAULT '0',
+  `jumlah` varchar(12) DEFAULT NULL,
+  `idsession` varchar(32) DEFAULT NULL,
+  `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
@@ -146,14 +146,14 @@ INSERT INTO `pesanan_detail` (`idpesanan`, `idpelanggan`, `idproduk`, `notagihan
 
 CREATE TABLE `produk` (
   `idproduk` int(4) UNSIGNED ZEROFILL NOT NULL,
-  `idkatproduk` int(4) NOT NULL DEFAULT 0,
-  `nama_produk` varchar(128) NOT NULL,
-  `deskripsi` longtext NOT NULL,
-  `harga` varchar(12) NOT NULL,
-  `stok` varchar(12) NOT NULL,
-  `gambar1` varchar(255) NOT NULL,
-  `gambar2` varchar(255) NOT NULL,
-  `gambar3` varchar(255) NOT NULL
+  `idkatproduk` int(4) DEFAULT 0,
+  `nama_produk` varchar(128) DEFAULT NULL,
+  `deskripsi` longtext DEFAULT NULL,
+  `harga` varchar(12) DEFAULT NULL,
+  `stok` varchar(12) DEFAULT NULL,
+  `gambar1` varchar(255) DEFAULT NULL,
+  `gambar2` varchar(255) DEFAULT NULL,
+  `gambar3` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -173,9 +173,9 @@ INSERT INTO `produk` (`idproduk`, `idkatproduk`, `nama_produk`, `deskripsi`, `ha
 
 CREATE TABLE `user` (
   `iduser` int(4) UNSIGNED NOT NULL,
-  `nama_lengkap` varchar(128) NOT NULL,
-  `email` varchar(128) NOT NULL,
-  `password` varchar(128) NOT NULL
+  `nama_lengkap` varchar(128) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  `password` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
