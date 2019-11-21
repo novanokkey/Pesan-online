@@ -1,0 +1,35 @@
+RewriteEngine on
+
+RewriteRule ^id-(.*)$ index.php [L]
+RewriteRule ^home$ index.php [L]
+RewriteRule ^dashboard$ dashboard.php?url=dashboard [L]
+
+RewriteRule ^menu$ menu.php?url=menu [L]
+RewriteRule ^hapus1-(.*)$ menu.php?url=menu&id=$1 [L]
+
+RewriteRule ^user$ user.php?url=user [L]
+RewriteRule ^hapus2-(.*)$ user.php?url=user&id=$1 [L]
+
+RewriteRule ^slider$ slider.php?url=slider [L]
+RewriteRule ^hapus3-(.*)$ slider.php?url=slider&id=$1 [L]
+
+RewriteRule ^about$ about.php?url=about [L]
+RewriteRule ^hapus4-(.*)$ about.php?url=about&id=$1 [L]
+
+RewriteRule ^page$ page.php?url=pages [L]
+RewriteRule ^hapus5-(.*)$ page.php?url=page&id=$1 [L]
+
+RewriteRule ^pembayaran$ pembayaran.php?url=pembayaran [L]
+RewriteRule ^hapus6-(.*)$ pembayaran.php?url=pembayaran&id=$1 [L]
+
+RewriteRule ^produk$ produk.php?url=produk [L]
+RewriteRule ^hapus7-(.*)$ produk.php?url=produk&id=$1 [L]
+
+RewriteRule ^pesanan$ pesanan.php?url=pesanan [L]
+RewriteRule ^hapus8-(.*)$ pesanan.php?url=pesanan&id=$1 [L]
+RewriteRule ^detail-(.*)$ pesanan.php?url=detail&id=$1 [L]
+
+RewriteRule ^logout$ logout.php [L]
+
+
+Options All -Indexes
