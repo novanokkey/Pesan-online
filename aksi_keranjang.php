@@ -5,14 +5,18 @@ function __autoload($class)
 }
 
 session_start();
+$pelanggan = new Pelanggan();
+
+$currentUser = $pelanggan->getUser();
 
         $idproduk=$_GET['id'];
         $jumlah='1';
-        $idsession = session_id();
+        $idpelanggan = $currentUser['idpelanggan'];
+      
        $keranjang = new Keranjang();
        
 
-       if($keranjang->addData($idproduk, $jumlah, $idsession)){
+       if($keranjang->addData($idproduk, $jumlah, $idpelanggan)){
         //echo "<script>alert('Data saved!');</script>";
         echo "<script>location.href='home'</script>";
         

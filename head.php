@@ -1,6 +1,7 @@
 <?php
     $keranjang = new Keranjang();
-    
+    $idpelanggan = $currentUser['idpelanggan'];
+    $keranjangku = $keranjang->selectCountall($idpelanggan);
 ?>
 <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
     <div class="container">
@@ -20,26 +21,37 @@
                 <li class="nav-item">
                     <a class="nav-link" href="produk">Produk </a>
                 </li>
+                <?php
+                    $pelanggan = new Pelanggan();
+                    if (!$pelanggan->isLoggedIn()) {
+                ?>
                 <li class="nav-item">
                     <a class="nav-link" href="pelanggan">Registrasi / Login </a>
+                </li>
+                    <?php } ?>
+                
+                <?php
+                   
+                    if ($pelanggan->isLoggedIn()) {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="pesananku">Pesananku </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="konfirmasi">Konfirmasi Pembayaran </a>
                 </li>
-                <?php
-                $pelanggan = new Pelanggan();
-                    if (!$pelanggan->isLoggedIn()) {
-                ?>
                 <li class="nav-item">
                     <a class="nav-link" href="logout">Logout </a>
                 </li>
-                    <?php } ?>
+                    <?php }?>
+                        
+
             </ul>
         </div>
         
         <a href="keranjang" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block" 
              aria-expanded="false">
-            Keranjang Ku (<?php ?>)
+            Keranjang Ku (<?php echo $keranjangku['idpelanggan'];?>)
         </a>
         
     </div>

@@ -4,7 +4,7 @@ function __autoload($class)
 {
     require_once "class/$class.php";
 }
-
+session_start();
 $folder   = "home";
 
 $tabeldb  = "$folder";

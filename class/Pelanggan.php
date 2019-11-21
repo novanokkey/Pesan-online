@@ -1,7 +1,12 @@
 <?php
+error_reporting(0);
 class Pelanggan extends Db
 {
-    
+    function __construct()
+
+    {
+        session_start();
+    }
 
     public function login($email, $password)
     {
@@ -19,7 +24,7 @@ class Pelanggan extends Db
             // Jika jumlah baris > 0 
 
             if ($stmt->rowCount() > 0) {
-
+                
                 $_SESSION['user_session'] = $data['idpelanggan'];
 
                 return true;
@@ -43,7 +48,6 @@ class Pelanggan extends Db
         // Apakah user_session sudah ada di session 
 
         if (isset($_SESSION['user_session'])) {
-
             return true;
         }
     }

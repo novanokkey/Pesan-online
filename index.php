@@ -175,7 +175,7 @@ foreach ($rows_produk as $row) {
                 <div class="card-footer-a">
                     <ul class="card-info d-flex justify-content-around">
                         <li>
-                        <a href="aksikeranjang-<?php echo $row['idproduk']; ?>" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block" >Masukan ke keranjang
+                                <a href="<?php $pelanggan = new Pelanggan(); if (!$pelanggan->isLoggedIn()) { ?>pelanggan<?php }else{?>aksikeranjang-<?php echo $row['idproduk']; } ?>" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block" >Masukan ke keranjang
                                     <span class="ion-ios-arrow-forward"></span>
                                 </a>
                         </li>

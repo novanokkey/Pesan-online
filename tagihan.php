@@ -4,15 +4,43 @@ function __autoload($class)
 {
     require_once "class/$class.php";
 }
+$pelanggan = new Pelanggan();
 
-$folder   = "home";
+$currentUser = $pelanggan->getUser();
+
+$folder   = "tagihan";
 
 $tabeldb  = "$folder";
 $hal    = "$folder.php";
-$halaman  = "home";
+$halaman  = "tagihan";
 
 $produk = new Produk();
 
+$keranjang = new Keranjang();
+                    $notagihan_ = $keranjang->noTagihan();
+                    $mytagihan = $notagihan_['idpesanan'] + 1;
+                    $hasilkode = "INV".str_pad($mytagihan, 4, "0", STR_PAD_LEFT);
+
+if (isset($_POST['submit'])) {
+    
+
+    $idpelanggan = $currentUser['idpelanggan'];
+    $notagihan1 = $hasilkode;
+    $notagihan2 = $hasilkode;
+    $metode_pembayaran = $_POST['metode_pembayaran'];
+    $catatan = $_POST['catatan'];
+    
+
+    $keranjang = new Keranjang();
+
+    if ($keranjang->addNotagihan($idpelanggan, $notagihan1, $notagihan2, $catatan, $metode_pembayaran)) {
+        echo "<script>alert('Pemesanan sudah dikirim, silahkan lakukan pembayaran dan konfirmasi pembayaran..');</script>";
+        echo "<script>location.href='produk'</script>";
+    } else {
+        echo "<script>alert('Pesanan anda belum terkirim, cek terlebih dahulu mungkin ada error');</script>";
+        echo "<script>location.href='$folder'</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,39 +87,14 @@ $produk = new Produk();
     <!--/ Form Search End /-->
 
     <!--/ Nav Star /-->
-    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
-        <div class="container">
-            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
-                aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <a class="navbar-brand text-brand" href="index.html">E<span class="color-b">SHOP</span></a>
-            <button type="button" class="btn btn-link nav-search navbar-toggle-box-collapse d-md-none"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                <span class="fa fa-search" aria-hidden="true"></span>
-            </button>
-            <div class="navbar-collapse collapse justify-content-left" id="navbarDefault">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="produk.php">Produk</a>
-                    </li>
-                </ul>
-            </div>
-            <a href="keranjang.php" class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                Keranjang Ku (0)
-            </a>
-        </div>
-    </nav>
+    <?php include "head.php"; ?>
     <!--/ Nav End /-->
     <section class="intro-single">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-lg-8">
                     <div class="title-single-box">
-                        <h1 class="title-single">Taguhan Ku</h1>
+                        <h1 class="title-single">Tagihan Ku</h1>
                         <span class="color-text-a">Pilihan terbaik untuk anda</span>
                     </div>
                 </div>
@@ -113,92 +116,85 @@ $produk = new Produk();
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <form class="form-a contactForm" action="" method="post" role="form">
-                        <div id="sendmessage">Your message has been sent. Thank you!</div>
-                        <div id="errormessage"></div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="form-group">
-                                    <label>Nama Depan</label>
-                                    <input type="text" name="name" class="form-control" placeholder="Nama Depan">
-                                    <div class="validation"></div>
+                <form id="form" action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+                <?php
+                    
+  
+?>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label>No. Tagihan</label>
+                                        <input type="text" name="notagihan" class="form-control" value="<?php echo $hasilkode; ?>" readonly placeholder="No. tagihan">
+                                        <div class="validation"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="form-group">
-                                    <label>Nama Belakang</label>
-                                    <input name="namabelakang" type="text" class="form-control"
-                                        placeholder="Nama belakang">
-                                    <div class="validation"></div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label>Nama Pemesan</label>
+                                        <input name="namapengirim" type="text" value="<?php echo $currentUser['nama_lengkap'];?>" readonly class="form-control"
+                                            placeholder="Nama pengirim">
+                                        <div class="validation"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Provinsi</label>
-                                    <input name="provinsi" type="text" class="form-control" placeholder="Provinsi">
-                                    <div class="validation"></div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label>Kode POS</label>
+                                        <input type="text" name="kodepos" value="<?php echo $currentUser['kodepos'];?>" readonly class="form-control" placeholder="Kode pos">
+                                        <div class="validation"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Kota</label>
-                                    <input name="kota" type="text" class="form-control" placeholder="Kota">
-                                    <div class="validation"></div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label>No. HP</label>
+                                        <input type="text" name="nohp" value="<?php echo $currentUser['nohp'];?>" readonly class="form-control" placeholder="No. HP">
+                                        <div class="validation"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Kelurahan</label>
-                                    <input name="kelurahan" type="text" class="form-control" placeholder="Kelurahan">
-                                    <div class="validation"></div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Alamat</label>
+                                        <input type="text" name="alamat" value="<?php echo $currentUser['alamat'];?>" readonly class="form-control" placeholder="alamat">
+                                        <div class="validation"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Alamat</label>
-                                    <input type="text" name="alamat" class="form-control" placeholder="Nama Depan">
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Kode Pos</label>
-                                    <input name="kodepos" type="text" class="form-control" placeholder="Kode pos">
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>No. Handphone</label>
-                                    <input name="nohp" type="text" class="form-control" placeholder="No. Handphone">
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input name="email" type="email" class="form-control" placeholder="Kode pos">
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label>Catatan</label>
-                                    <textarea name="catatan" class="form-control" cols="45" rows="8"
-                                        data-rule="required" data-msg="Please write something for us"
-                                        placeholder="Message"></textarea>
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
+                                
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Cara Bayar</label>
+                                        <select class="form-control" name="metode_pembayaran" style="width: 100%;" required>
+                                        <option value="">Pilih</option>
+                                        <option value="transfer">Transfer</option>
+                                        <option value="bayar_ditempat">Bayar ditempat</option>
 
-
-                        </div>
-                    </form>
+                                    </select>
+                                        <div class="validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Catatan</label>
+                                        <input type="text" name="catatan" class="form-control" placeholder="catatan">
+                                        <div class="validation"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                <button type="submit" class=" btn btn-a  btn-block" name="submit">Selesaikan sekarang</button>
+                                
+                                </div>
+                                
+                            </div>
+                        </form>
                 </div>
                 <div class="col-sm-4">
 
 
+<?php
 
+$idpelanggan = $currentUser['idpelanggan'];
+$daftar_tagihan = $keranjang->selectSumTagihan($idpelanggan);
+?>
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
@@ -210,30 +206,42 @@ $produk = new Produk();
                             </tr>
                         </thead>
                         <tbody>
+                        <?php
+                        $i=1;
+                            $rows_keranjang = $keranjang->selectall($idpelanggan);
+                            foreach ($rows_keranjang as $row) {
+
+                                $idproduk = $row['idproduk'];
+                                $hit_produk = $keranjang->selectCountProduk($idproduk,$idpelanggan);
+                        ?>
                             <tr>
 
-                                <td>Kamar Bintang 7 x 1</td>
+                                <td><?php echo $row['nama_produk']; ?> x <?php echo $hit_produk['idproduk']; ?> </td>
 
                                 <td>
-                                    <right>120.000</right>
+                                    <right><?php echo number_format($row['harga'],0,',','.'); ?></right>
                                 </td>
                             </tr>
-                            <tr>
+                            <?php }?>
+                            <tr style="background-color:green;">
                                 <th>
-                                    <left>Total</left>
+                                <font color="black"><left>Total</left></font>
                                 </th>
 
-                                <td>
-                                    <right>120.000</right>
+                                <td><font color="black">
+                                    <right><?php 
+                                     
+
+                                     echo number_format($total,0,',','.')
+                                     ?></right>
+                                     </font>
                                 </td>
                             </tr>
 
                         </tbody>
                     </table>
                     <hr>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-a">Selesaikan Tagihan</button>
-                    </div>
+                    
 
                 </div>
 
@@ -242,38 +250,9 @@ $produk = new Produk();
         </div>
     </section>
 
+<br><hr>
 
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav class="nav-footer">
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <a href="#">Hubungi Kami</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Tentang Kami</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Pusat Bantuan</a>
-                            </li>
-
-                        </ul>
-                    </nav>
-
-                    <div class="copyright-footer">
-                        <p class="copyright color-text-a">
-                            &copy; Copyright
-                            <span class="color-a">ESHOP</span>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </footer>
+<<?php include "foot.php"; ?>
     <!--/ Footer End /-->
 
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>

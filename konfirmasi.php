@@ -4,51 +4,37 @@ function __autoload($class)
 {
     require_once "class/$class.php";
 }
-
-$folder   = "pelanggan";
+session_start();
+$folder   = "konfirmasi";
 
 $tabeldb  = "$folder";
 $hal    = "$folder.php";
-$halaman  = "pelanggan";
+$halaman  = "konfirmasi";
 
 $pelanggan = new Pelanggan();
 
 $currentUser = $pelanggan->getUser();
 
-if (isset($_POST['login'])) {
 
-    $email = $_POST['email'];
-
-    $password = $_POST['password'];
-
-    // Proses login user 
-
-    if ($pelanggan->login($email, $password)) {
-        echo "<script>alert('Login berhasil');</script>";
-        header("location: produk");
-    } else {
-
-        echo "<script>alert('Login gagal');</script>";
-        header("location: pelanggan");
-    }
-}
 
 if (isset($_POST['submit'])) {
 
-    $nama_lengkap = $_POST['nama_lengkap'];
-    $alamat = $_POST['alamat'];
-    $kodepos = $_POST['kodepos'];
-    $nohp = $_POST['nohp'];
+    $notagihan = $_POST['notagihan'];
+    $namapengirim = $_POST['namapengirim'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $bankasal = $_POST['bankasal'];
+    $tgltransfer = $_POST['tgltransfer'];
+    $banktujuan = $_POST['banktujuan'];
+    $jumlahtransfer = $_POST['jumlahtransfer'];
+    $pesan = $_POST['pesan'];
 
-    $pelanggan = new Pelanggan();
+    $konfirmasi = new Konfirmasi();
 
-    if ($pelanggan->addData($nama_lengkap, $alamat, $kodepos, $nohp, $email, $password)) {
-        echo "<script>alert('Registrasi berhasil');</script>";
+    if ($konfirmasi->addData($notagihan, $namapengirim, $email, $bankasal, $tgltransfer, $banktujuan, $jumlahtransfer, $pesan)) {
+        echo "<script>alert('Konfirmasi berhasil, akan segera diproses petugas trimakasih');</script>";
         echo "<script>location.href='$folder'</script>";
     } else {
-        echo "<script>alert('Registrasi belum disimpan, mungkin email sudah terdaftar!');</script>";
+        echo "<script>alert('Konfirmasi pembayaran belum berhasil, mungkin terjadi kesalahan');</script>";
         echo "<script>location.href='$folder'</script>";
     }
 }
@@ -105,15 +91,15 @@ if (isset($_POST['submit'])) {
             <div class="row">
                 <div class="col-md-12 col-lg-8">
                     <div class="title-single-box">
-                        <h1 class="title-single">Registrasi / Login</h1>
-                        <span class="color-text-a">Buat akun sekarang, untuk dapat memesan produk yang anda inginkan</span>
+                        <h1 class="title-single">Konfirmasi pembayaran</h1>
+                        <span class="color-text-a">segera lakukan pembayaran</span>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-4">
                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#">akun pelanggan</a>
+                                <a href="#">Konfirmasi</a>
                             </li>
 
                         </ol>
@@ -127,106 +113,74 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Registrasi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Login</a>
-                    </li>
-                    
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <br><br>
-                    <center><h1>Registrasi Pelanggan</h1></center>
-                    <br><br>
+                
                     <form id="form" action="" class="form-horizontal" enctype="multipart/form-data" method="post">
-                            
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
-                                        <label>Nama Lengkap</label>
-                                        <input type="text" name="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                                        <label>No. Tagihan</label>
+                                        <input type="text" name="notagihan" class="form-control" placeholder="No. tagihan">
                                         <div class="validation"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
-                                        <label>No. Handphone</label>
-                                        <input name="nohp" type="text" class="form-control"
-                                            placeholder="No. HP">
-                                        <div class="validation"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-group">
-                                        <label>Alamat</label>
-                                        <input name="alamat" type="text" class="form-control" placeholder="Input dengan alamat lengkap, Gedung/Jalan secara detail">
-                                        <div class="validation"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-group">
-                                        <label>Kode POS</label>
-                                        <input name="kodepos" type="text" class="form-control" placeholder="kode pos">
+                                        <label>Nama pengirim</label>
+                                        <input name="namapengirim" type="text" class="form-control"
+                                            placeholder="Nama pengirim">
                                         <div class="validation"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input name="email" type="email" class="form-control" placeholder="Email">
+                                        <input name="email" type="text" class="form-control" placeholder="Email">
                                         <div class="validation"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group">
-                                        <label>Password</label>
-                                        <input type="password" name="password" class="form-control" placeholder="Password">
+                                        <label>Bank asal(pengirim)</label>
+                                        <input name="bankasal" type="text" class="form-control" placeholder="Bank asal">
+                                        <div class="validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Tanggal transfer</label>
+                                        <input name="tgltransfer" type="text" class="form-control" placeholder="Tanggal transfer">
+                                        <div class="validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Bank tujuan</label>
+                                        <input type="text" name="banktujuan" class="form-control" placeholder="bank tujuan">
+                                        <div class="validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Jumlah transfer</label>
+                                        <input type="text" name="jumlahtransfer" class="form-control" placeholder="Jumlah transfer Rp.xxxxxxx">
+                                        <div class="validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label>Pesan</label>
+                                        <input type="text" name="pesan" class="form-control" placeholder="pesan">
                                         <div class="validation"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary btn-block" name="submit">Registrasi</button>
+                                <button type="submit" class="btn btn-primary btn-block" name="submit">Konfirmasi sekarang</button>
                                 
                                 </div>
                                 
                             </div>
                         </form>
                     
-                    </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <br><br>
-                    <center><h1>Login</h1></center>
-                    <br><br>
-                    <form action="" class="validate_form" method="post" enctype="multipart/form-data">
-                            
-                            <div class="row">
-                                
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <input name="email" type="email" class="form-control" placeholder="Email">
-                                        <div class="validation"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input type="password" name="password" class="form-control" placeholder="Password">
-                                        <div class="validation"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                <button type="submit" name="login" class="btn btn-primary btn-lg btn-block">Login</button>
-                                </div>
-                                
-                            </div>
-                        </form>
-                    </div>
-                    
-                </div>
                 
 
 

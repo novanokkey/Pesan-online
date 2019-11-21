@@ -1,7 +1,12 @@
 <?php
+error_reporting(0);
 class Produk extends Db
 {
+    function __construct()
 
+    {
+        session_start();
+    }
     // select all data
     public function selectall()
     {

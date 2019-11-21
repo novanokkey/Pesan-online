@@ -4,18 +4,18 @@ function __autoload($class)
 {
     require_once "class/$class.php";
 }
-session_start();
+session_start(); 
+$folder   = "pesananku";
+
 $pelanggan = new Pelanggan();
 
 $currentUser = $pelanggan->getUser();
 
-$folder   = "home";
-
 $tabeldb  = "$folder";
 $hal    = "$folder.php";
-$halaman  = "home";
+$halaman  = "pesananku";
 
-$produk = new Produk();
+$keranjang = new Keranjang();
 
 ?>
 <!DOCTYPE html>
@@ -59,6 +59,9 @@ $produk = new Produk();
 
     <div class="click-closed"></div>
     <!--/ Form Search Star /-->
+
+    <!--/ Form Search End /-->
+
     <?php include "head.php"; ?>
     <!--/ Nav End /-->
     <section class="intro-single">
@@ -66,15 +69,15 @@ $produk = new Produk();
             <div class="row">
                 <div class="col-md-12 col-lg-8">
                     <div class="title-single-box">
-                        <h1 class="title-single">Daftar Produk Kami</h1>
-                        <span class="color-text-a">Pilihan terbaik untuk anda</span>
+                        <h1 class="title-single">Pesanan Ku</h1>
+                        <span class="color-text-a">Lihat pesananku</span>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-4">
                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="produk">Produk</a>
+                                <a href="#">pesananku</a>
                             </li>
 
                         </ol>
@@ -84,64 +87,59 @@ $produk = new Produk();
         </div>
     </section>
 
-    <section class="property-grid grid">
+    <section class="property-single nav-arrow-b">
         <div class="container">
             <div class="row">
-                
-                <?php
+                <div class="col-sm-12">
 
 
-                $rows_produk = $produk->selectall();
-                foreach ($rows_produk as $row) {
-                    ?>
 
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="img/produk/<?php echo $row['gambar1']; ?>" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a href="property-single.html"><?php echo $row['nama_produk']; ?>
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">Rp. <?php echo number_format($row['harga'],0,',','.'); ?></span>
-                                    </div>
-                                    <a href="detailproduk-<?php echo $row['idproduk']; ?>" class="link-a">Lihat detail
-                                        <span class="ion-ios-arrow-forward"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <a href="<?php $pelanggan = new Pelanggan(); if (!$pelanggan->isLoggedIn()) { ?>pelanggan<?php }else{?>aksikeranjang-<?php echo $row['idproduk']; } ?>" class="link-a">Masukan ke keranjang
-                                                <span class="ion-ios-arrow-forward"></span>
-                                            </a>
-                                        </li>
+                    <table class="table table-sm table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="13%">No tagihan</th>
+                                <th scope="col">Total tagihan</th>
+                                <th scope="col">Metode pembayaran</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">
+                                    Catatan
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $i=1;
+                            $rows_keranjang = $keranjang->selectPesenan($idpelanggan);
+                            foreach ($rows_keranjang as $row) {
 
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                
+                        ?>
+                            <tr>
+                            <td><?php echo $row['notagihan']; ?> </td>
+                            <td><?php echo number_format($row['totaltagihan'],0,',','.'); ?></td>
+                                <td><?php echo $row['metode_pembayaran']; ?> </td>
+                                <td><?php if($row['status_pembayaran']=='T'){echo 'Diproses admin'; }else{ echo 'Sudah diproses'; }  ?> </td>
+                                <td><?php echo $row['catatan']; ?> </td>
+                                
+                                
+                            </tr>
+                            
+ <?php }?>
+ 
+                        </tbody>
+                    </table>
+                    
                 </div>
-
-                <?php } ?>
 
 
             </div>
-            
         </div>
     </section>
 
-<hr>
-    <?php include "foot.php"; ?>
 
+
+    <?php include "foot.php"; ?>
+    <!--/ Footer End /-->
 
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
     <div id="preloader"></div>

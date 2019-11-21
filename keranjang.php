@@ -4,13 +4,17 @@ function __autoload($class)
 {
     require_once "class/$class.php";
 }
-
+session_start(); 
 $folder   = "home";
+
+$pelanggan = new Pelanggan();
+
+$currentUser = $pelanggan->getUser();
 
 $tabeldb  = "$folder";
 $hal    = "$folder.php";
 $halaman  = "home";
-session_start(); 
+
 $keranjang = new Keranjang();
 
 ?>
@@ -105,11 +109,11 @@ $keranjang = new Keranjang();
                         <tbody>
                         <?php
                         $i=1;
-                            $rows_keranjang = $keranjang->selectall($idsession);
+                            $rows_keranjang = $keranjang->selectall($idpelanggan);
                             foreach ($rows_keranjang as $row) {
 
                                 $idproduk = $row['idproduk'];
-                                $hit_produk = $keranjang->selectCountProduk($idproduk);
+                                $hit_produk = $keranjang->selectCountProduk($idproduk,$idpelanggan);
                         ?>
                             <tr>
                                 <th scope="row"><?php echo $i++ ?></th>
@@ -149,9 +153,9 @@ $keranjang = new Keranjang();
                     </table>
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="produk.php" class="btn btn-warning navbar-toggle-box-collapse d-none d-md-block">
+                            <a href="produk" class="btn btn-warning navbar-toggle-box-collapse d-none d-md-block">
                                 << Cari Produk lagi </a> </div> <div class="col-md-6">
-                                    <a href="tagihan.php"
+                                    <a href="<?php if($keranjangku['idpelanggan'] == '0'){echo 'produk';}else{echo 'tagihan';}?>"
                                         class="btn btn-primary navbar-toggle-box-collapse d-none d-md-block">
                                         Selesaikan Pesanan >>
                                     </a>
