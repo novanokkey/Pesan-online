@@ -17,6 +17,7 @@ $halaman  = "home";
 
 $keranjang = new Keranjang();
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,7 +78,7 @@ $keranjang = new Keranjang();
                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#">Keranjang</a>
+                            <a href="hapusdatakeranjang-<?php echo $currentUser['idpelanggan']?>" onclick="return confirm('Are you sure ?')" class="btn btn-sm btn-warning btn-flat">Hapus Keranjang <i class="fa fa-trash"></i></a>
                             </li>
 
                         </ol>
@@ -93,7 +94,7 @@ $keranjang = new Keranjang();
                 <div class="col-sm-12">
 
 
-
+                
                     <table class="table table-sm table-dark">
                         <thead>
                             <tr>

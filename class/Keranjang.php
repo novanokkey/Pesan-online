@@ -26,10 +26,11 @@ public function noTagihan()
     //menampilkan list tagihan admin
     public function selectTagihanadm()
     {
-        $sql = "SELECT pesanan.notagihan,pesanan.metode_pembayaran,pesanan.status_pembayaran,pesanan.catatan,
+        $sql = "SELECT pesanan.notagihan,pesanan.metode_pembayaran,pesanan.status_pembayaran,pesanan.catatan,pelanggan.nama_lengkap,pelanggan.nohp,
         SUM(produk.harga) AS 'totaltagihan' FROM pesanan
                INNER JOIN pesanan_detail ON pesanan_detail.notagihan=pesanan.notagihan
                INNER JOIN produk ON produk.idproduk=pesanan_detail.idproduk
+               INNER JOIN pelanggan ON pelanggan.idpelanggan=pesanan_detail.idpelanggan
                GROUP BY pesanan.notagihan order by pesanan.notagihan desc";
         $result = $this->connect()->query($sql);
         if ($result->rowCount() > 0) {
@@ -39,6 +40,53 @@ public function noTagihan()
             return $data;
         }
     }
+
+    public function selectDetailtagihan($notagihan)
+    {
+
+        $sql = "SELECT pesanan.notagihan,pesanan.metode_pembayaran,pesanan.status_pembayaran,pesanan.catatan,pelanggan.nama_lengkap,pelanggan.nohp,
+        SUM(produk.harga) AS 'totaltagihan' FROM pesanan
+               INNER JOIN pesanan_detail ON pesanan_detail.notagihan=pesanan.notagihan
+               INNER JOIN produk ON produk.idproduk=pesanan_detail.idproduk
+               INNER JOIN pelanggan ON pelanggan.idpelanggan=pesanan_detail.idpelanggan
+        WHERE pesanan.notagihan='$notagihan'";
+        
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    public function selectDaftarPesanan($notagihan)
+    {
+        $sql = "SELECT pesanan_detail.idpesanandetail,pesanan_detail.idproduk,pesanan_detail.notagihan,pesanan_detail.jumlah,pesanan_detail.idpelanggan,pesanan_detail.`status`,produk.nama_produk,produk.harga FROM pesanan_detail
+        INNER JOIN produk ON produk.idproduk=pesanan_detail.idproduk
+               
+        WHERE pesanan_detail.notagihan='$notagihan' group by produk.idproduk";
+        $result = $this->connect()->query($sql);
+        if ($result->rowCount() > 0) {
+            while ($row = $result->fetch()) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
+
+    public function selectCountDetailpesanan($idproduk,$idpelanggan,$notagihan)
+    {
+
+        $sql = "SELECT COUNT(idproduk) AS 'idproduk' FROM pesanan_detail
+        WHERE pesanan_detail.idproduk='$idproduk' and idpelanggan='$idpelanggan' and notagihan='$notagihan'";
+        
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
 // menampilkan list pesenan pelanggan
     public function selectPesenan($idpelanggan)
     {
@@ -184,4 +232,28 @@ public function noTagihan()
 
         return $result;
     }
+
+    public function editDataPembayaran($id, $status_pembayaran)
+    {
+        $sql = "UPDATE pesanan
+                    SET status_pembayaran=:status_pembayaran
+        WHERE notagihan=:id";
+
+        $q = $this->connect()->prepare($sql);
+        $q->execute(array(
+            ':id' => $id, ':status_pembayaran' => $status_pembayaran
+        ));
+
+        return true;
+    }
+
+    public function deleteKeranjangPelanggan($id)
+    {
+        $sql = "DELETE FROM pesanan_detail WHERE idpelanggan=:id and status='0'";
+        $q = $this->connect()->prepare($sql);
+        $q->execute(array(':id' => $id));
+
+        return true;
+    }
+
 }

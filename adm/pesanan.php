@@ -19,12 +19,7 @@
     $hal    = "$folder.php";
     $halaman  = "pesanan";
 
-    $uid = '1';
-    $config = new Config();
-    $result = $config->selectByid($uid);
-
-
-    
+       
 
     if (isset($_POST['update']))
     {

@@ -13,6 +13,7 @@ RewriteRule ^pelanggan$ pelanggan.php [L]
 RewriteRule ^pesananku$ pesananku.php [L]
 
 RewriteRule ^aksikeranjang-(.*)$ aksi_keranjang.php?id=$1 [L]
+RewriteRule ^hapusdatakeranjang-(.*)$ hapusdatakeranjang.php?id=$1 [L]
 
 RewriteRule ^logout$ logout.php [L]
 Options All -Indexes

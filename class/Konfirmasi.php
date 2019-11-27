@@ -6,7 +6,7 @@ class Konfirmasi extends Db
     // select all data
     public function selectall()
     {
-        $sql = "SELECT * FROM konfirmasi_tagihan";
+        $sql = "SELECT * FROM konfirmasi_tagihan order by notagihan desc";
         $result = $this->connect()->query($sql);
         if ($result->rowCount() > 0) {
             while ($row = $result->fetch()) {

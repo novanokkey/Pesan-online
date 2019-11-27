@@ -42,12 +42,12 @@
                   <td>Rp. <?php echo number_format($row['totaltagihan'],0,',','.'); ?></td>
                   
                   <td>
-                    <a href="#" type="button" class="btn btn-sm btn-info btn-flat" data-toggle="modal" data-target="#myModal<?php echo $row['idpesanan']; ?>"><i class="fa fa-pencil"></i></a>
+                    <a href="#" type="button" class="btn btn-sm btn-info btn-flat" data-toggle="modal" data-target="#myModal<?php echo $row['notagihan']; ?>"><i class="fa fa-pencil"></i></a>
                     <a href="detail-<?php echo $row['notagihan']?>"  class="btn btn-sm btn-warning btn-flat">Detail</a>
                   </td>
 
                 </tr>
-                <div class="modal fade" id="myModal<?php echo $row['idpesanan']; ?>" role="dialog">
+                <div class="modal fade" id="myModal<?php echo $row['notagihan']; ?>" role="dialog">
                   <div class="modal-dialog">
                   <!-- Modal content-->
                   <div class="modal-content">
@@ -59,9 +59,9 @@
                   <form action="" class="form-horizontal" method="post">
 
                   <?php
-                      $id = $row['idpesanan']; 
+                      $id = $row['notagihan']; 
                       $pesanan = new Keranjang();
-                      $result = $pesanan->selectByid($id);
+                      $result = $pesanan->selectDetailtagihan($id);
                   ?>
 
                       <div class="container-fluid">
@@ -69,8 +69,8 @@
                                     <label>Status pembayaran</label>
                                     <select name="status_pembayaran" class="form-control select2" style="width: 100%;">
                                     
-                                      <option value="T" <?php if ('T'==$result['status_pembayaran']){ echo"selected";}?>>Belum bayar</option>
-                                      <option value="Y" <?php if ('Y'==$result['status_pembayaran']){ echo"selected";}?>>Sudah bayar</option>
+                                      <option value="T" <?php if ($result['status_pembayaran']=='T'){ echo"selected";}?>>Belum bayar</option>
+                                      <option value="Y" <?php if ($result['status_pembayaran']=='Y'){ echo"selected";}?>>Sudah bayar</option>
                                       
                                     </select>
                                   </div>
@@ -78,7 +78,7 @@
                                 </div>
 
                                 <div class="modal-footer">  
-                                <input type="hidden" class="form-control" name="id" value="<?php echo $result['idpesanan']; ?>">
+                                <input type="hidden" class="form-control" name="id" value="<?php echo $result['notagihan']; ?>">
                                 <button type="submit" class="btn btn-success" name="update">Update</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>

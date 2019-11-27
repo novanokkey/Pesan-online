@@ -10,7 +10,19 @@ class Produk extends Db
     // select all data
     public function selectall()
     {
-        $sql = "SELECT * FROM produk";
+        $sql = "SELECT * FROM produk INNER JOIN kategori_produk ON kategori_produk.idkatproduk=produk.idkatproduk";
+        $result = $this->connect()->query($sql);
+        if ($result->rowCount() > 0) {
+            while ($row = $result->fetch()) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
+    public function selectallkategori()
+    {
+        $sql = "SELECT * FROM kategori_produk";
         $result = $this->connect()->query($sql);
         if ($result->rowCount() > 0) {
             while ($row = $result->fetch()) {
@@ -44,16 +56,16 @@ class Produk extends Db
         return true;
     }
 
-    public function editData($id, $idkatproduk, $nama_produk, $deskripsi, $harga, $stok, $gambar1, $gambar2, $gambar3)
+    public function editData($id, $idkatproduk, $nama_produk, $deskripsi, $harga, $stok)
     {
         $sql = "UPDATE produk
-                    SET idkatproduk=:idkatproduk,nama_produk=:nama_produk,deskripsi=:deskripsi,harga=:harga,stok=:stok,gambar1=:gambar1, gambar2=:gambar2,gambar3=:gambar3
+                    SET idkatproduk=:idkatproduk,nama_produk=:nama_produk,deskripsi=:deskripsi,harga=:harga,stok=:stok
         WHERE idproduk=:id";
 
         $q = $this->connect()->prepare($sql);
         $q->execute(array(
             ':id' => $id, ':idkatproduk' => $idkatproduk,
-            ':nama_produk' => $nama_produk, ':deskripsi' => $deskripsi, ':harga' => $harga, ':stok' => $stok, ':gambar1' => $gambar1, ':gambar2' => $gambar2, ':gambar3' => $gambar3
+            ':nama_produk' => $nama_produk, ':deskripsi' => $deskripsi, ':harga' => $harga, ':stok' => $stok
         ));
 
         return true;
